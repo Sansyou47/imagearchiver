@@ -4,18 +4,23 @@ import math
 
 resize = Blueprint("resize", __name__)
 
-def resize_image(res):
-    img = Image.open("images/origin/test2.jpg")
+imgLocation_origin = 'images/origin/'
+imgLocation_resized = 'images/downsize/'
+
+def imgResize(res):
+    img = Image.open(imgLocation_origin + 'test.jpg')
     image_x = img.width
     image_y = img.height
 
     multiple = int(image_x / res)
 
     size = (res, int(image_y / multiple))
+    
+    meta = 'resize=' + str(size)
 
     img_resized = img.resize(size)
 
-    img_resized.save("images/downsize/test_resized.jpg")
+    img_resized.save(imgLocation_resized + 'test' + '_resized' + '(' + str(meta) + ')' + '.jpg')
 
 
 @resize.route('/func', methods=["POST"])
@@ -23,9 +28,9 @@ def func():
     if request.method == "POST":
         num = request.form.get("submit")
         if num == "1":
-            resize_image(155)
+            imgResize(155)
         elif num == "2":
-            resize_image(300)
+            imgResize(300)
         elif num == "3":
-            resize_image(100)
+            imgResize(600)
         return render_template('index.html')
