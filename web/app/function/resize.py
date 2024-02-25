@@ -1,36 +1,38 @@
 from flask import Flask, render_template, request, Blueprint
 from PIL import Image
-import math
 
 resize = Blueprint("resize", __name__)
 
+# オリジナル画像の保存先
 imgLocation_origin = 'images/origin/'
+# リサイズ画像の保存先
 imgLocation_resized = 'images/downsize/'
 
-def imgResize(res):
+def imgResize(weight):
     img = Image.open(imgLocation_origin + 'test.jpg')
-    image_x = img.width
-    image_y = img.height
-
-    multiple = int(image_x / res)
-
-    size = (res, int(image_y / multiple))
     
-    meta = 'resize=' + str(size)
+    # 画像のサイズを取得
+    before = img.size
 
-    img_resized = img.resize(size)
+    # 拡大・縮小の倍率を計算
+    multiple = before[0] / weight
 
-    img_resized.save(imgLocation_resized + 'test' + '_resized' + '(' + str(meta) + ')' + '.jpg')
+    # 元のアス比でリサイズ解像度を計算
+    after = (weight, int(before[1] / multiple))
+    
+    # リサイズ処理
+    img_resized = img.resize(after)
+    
+    meta = meta_generate(before, after)
 
+    # リサイズ画像を保存（ファイル名にメタデータを付与）
+    img_resized.save(imgLocation_resized + 'test' + '(' + str(meta) + ')' + '.jpg')
 
-@resize.route('/func', methods=["POST"])
-def func():
-    if request.method == "POST":
-        num = request.form.get("submit")
-        if num == "1":
-            imgResize(155)
-        elif num == "2":
-            imgResize(300)
-        elif num == "3":
-            imgResize(600)
-        return render_template('index.html')
+def meta_generate(src_before, src_after):
+    if src_before[0] > src_after[0]:
+        dmeta = 'downsizing,'
+    else:
+        dmeta = 'enlargement,'
+    dmeta += 'resolution=' + str(src_after[0]) + 'x' + str(src_after[1])
+    
+    return dmeta
