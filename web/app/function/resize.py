@@ -8,7 +8,7 @@ imgLocation_origin = 'images/origin/'
 # リサイズ画像の保存先
 imgLocation_resized = 'images/downsize/'
 
-def imgResize(weight):
+def imgResize(weight, qlv):
     img = Image.open(imgLocation_origin + 'test.jpg')
     
     # 画像のサイズを取得
@@ -23,16 +23,17 @@ def imgResize(weight):
     # リサイズ処理
     img_resized = img.resize(after)
     
-    meta = meta_generate(before, after)
+    meta = meta_generate(before, after, qlv)
 
     # リサイズ画像を保存（ファイル名にメタデータを付与）
-    img_resized.save(imgLocation_resized + 'test' + '(' + str(meta) + ')' + '.jpg')
+    img_resized.save(imgLocation_resized + 'test' + '(' + str(meta) + ')' + '.jpg', quality=qlv)
 
-def meta_generate(src_before, src_after):
+def meta_generate(src_before, src_after, qlv):
     if src_before[0] > src_after[0]:
-        dmeta = 'downsizing,'
+        dmeta = 'downsizing_'
     else:
-        dmeta = 'enlargement,'
-    dmeta += 'resolution=' + str(src_after[0]) + 'x' + str(src_after[1])
+        dmeta = 'enlargement_'
+    dmeta += 'resolution=' + str(src_after[0]) + 'x' + str(src_after[1]) + '_'
+    dmeta += 'quality=' + str(qlv)
     
     return dmeta

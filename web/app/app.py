@@ -9,18 +9,22 @@ app.register_blueprint(resize.resize)
 def index():
     if request.method == 'POST':
         num = request.form.get("submit")
+        quality = request.form.get("radio")
+        if quality is None:
+            quality = 75
+        quality = int(quality)
         if num == "1":
-            resize.imgResize(155)
+            resize.imgResize(155, quality)
         elif num == "2":
-            resize.imgResize(300)
+            resize.imgResize(300, quality)
         elif num == "3":
-            resize.imgResize(600)
+            resize.imgResize(600, quality)
         else:
             res = request.form.get("text")
-            if res is None:
+            if res == '':
                 return redirect('/')
             else:
-                resize.imgResize(int(res))
+                resize.imgResize(int(res), quality)
         return redirect('/')
     else:
         return render_template('index.html')
