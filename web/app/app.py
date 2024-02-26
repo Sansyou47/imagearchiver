@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from function import resize, save
+import ctypes, subprocess
+
+libc = ctypes.cdll.LoadLibrary("./c/sample.so")
 
 app = Flask(__name__)
 
@@ -40,9 +43,36 @@ def index():
             else:
                 res = int(res)
                 resize.imgResize(imageName, res, quality)
+        
+        libc.encrypt_image_file(imageName, imageName)
         return redirect('/')
     else:
         return render_template('index.html')
+    
+@app.route('/fib', methods = ['GET', 'POST'])
+def fib():
+    if request.method == 'POST':
+        num = request.form.get('number')
+        preset = request.form.get('preset')
+        if num is None:
+            return redirect('/fib')
+        num = int(num)
+        if preset == 1:
+            result = fib(num)
+        else:
+            result = libc.fib(num)
+        return str(result)
+    else:
+        return render_template('fib.html')
+    
+@app.route('/compile')
+def comp():
+    return render_template('func.html')
+    
+@app.route('/action/compile')
+def compile():
+    subprocess.run(['gcc', './c/sample.c', '-shared', '-o', './c/sample.so'])
+    return redirect('/compile')
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
