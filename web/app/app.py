@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from function import resize, save
 import ctypes, subprocess
 
-libc = ctypes.cdll.LoadLibrary("./c/sample.so")
+# libc = ctypes.cdll.LoadLibrary("./c/sample.so")
 
 app = Flask(__name__)
 
@@ -44,7 +44,7 @@ def index():
                 res = int(res)
                 resize.imgResize(imageName, res, quality)
         
-        libc.encrypt_image_file(imageName, imageName)
+        # libc.encrypt_image_file(imageName, imageName)
         return redirect('/')
     else:
         return render_template('index.html')
@@ -59,8 +59,8 @@ def fib():
         num = int(num)
         if preset == 1:
             result = fib(num)
-        else:
-            result = libc.fib(num)
+        # else:
+        #     result = libc.fib(num)
         return str(result)
     else:
         return render_template('fib.html')
