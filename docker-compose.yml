@@ -16,17 +16,17 @@ services:
     # depends_on:
     #   - mysql
 
-  # mysql:
-  #   build: db/
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
-  #     MYSQL_USER: ${MYSQL_USER}
-  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  #     TZ: ${default_timezone}
-  #   ports:
-  #     - "3306:3306"
-  #   hostname: mysql
-  #   volumes:
-  #     - ./db/data:/work
-  #     - ./db/data:/docker-entrypoint-initdb.d/
+  mysql:
+    build: db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${default_timezone}
+    ports:
+      - "3306:3306"
+    hostname: mysql
+    volumes:
+      - ./db/data:/work
+      - ./db/data:/docker-entrypoint-initdb.d/
