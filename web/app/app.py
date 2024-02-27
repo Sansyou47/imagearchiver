@@ -1,13 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flaskext.mysql import MySQL
 from function import resize, save
-import ctypes, subprocess
+import ctypes, subprocess, os
 
-libc = ctypes.cdll.LoadLibrary("./c/sample.so")
+# libc = ctypes.cdll.LoadLibrary("./c/sample.so")
 
 app = Flask(__name__)
 
+app.config["MYSQL_DATABASE_USER"] = os.getenv("MYSQL_USER")
+app.config["MYSQL_DATABASE_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
+app.config["MYSQL_DATABASE_DB"] = os.getenv("MYSQL_DATABASE")
+app.config["MYSQL_DATABASE_HOST"] = "mysql"
+
+mysql = MySQL(app)
+
 app.register_blueprint(resize.resize)
 app.register_blueprint(save.save)
+
+resize.mysql = mysql
+save.mysql = mysql
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
@@ -25,10 +36,10 @@ def index():
         if image is None:
             return redirect('/')
         
-        if save.extensionJudge(image.filename) == False:
+        # 画像の保存と同時に拡張子を検査し、非対応の拡張子だった場合はfalseを返してリダイレクト
+        imageName = save.imgSave(image, mysql)
+        if imageName == False:
             return redirect('/')
-        
-        imageName = save.imgSave(image)
         
         if num == "1":
             resize.imgResize(imageName, 155, quality)
@@ -44,10 +55,10 @@ def index():
                 res = int(res)
                 resize.imgResize(imageName, res, quality)
         
-        inputfile = '/app/test_raw.txt'
-        outputfile = '/app/test_enc.txt'
+        # inputfile = '/app/test_raw.txt'
+        # outputfile = '/app/test_enc.txt'
         
-        libc.encrypt_image_file(inputfile.encode(), outputfile.encode())
+        # libc.encrypt_image_file(inputfile.encode(), outputfile.encode())
         
         return redirect('/')
     else:
@@ -63,8 +74,8 @@ def fib():
         num = int(num)
         if preset == 1:
             result = fib(num)
-        else:
-            result = libc.fib(num)
+        # else:
+        #     result = libc.fib(num)
         return str(result)
     else:
         return render_template('fib.html')
