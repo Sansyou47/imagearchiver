@@ -1,8 +1,5 @@
-from flask import Flask, render_template, request, Blueprint
 from PIL import Image
 from function import variable
-
-resize = Blueprint("resize", __name__)
 
 def imgResize(imgName, weight, qlv):
     img = Image.open(variable.imgLocation_origin + imgName)
