@@ -1,13 +1,18 @@
 from flask import Flask, render_template, request, Blueprint
+from flaskext.mysql import MySQL
 from PIL import Image
-from function import variable
+from function import variable, save
 
 resize = Blueprint("resize", __name__)
 
+mysql = None
+
 def imgResize(imgName, weight, qlv):
     img = Image.open(variable.imgLocation_origin + imgName)
-    # 画像のサイズを取得
+    # 画像の解像度を取得
     before = img.size
+    
+    ext = imgName.split('.')[-1]
 
     # 拡大・縮小の倍率を計算
     multiple = before[0] / weight
@@ -23,8 +28,15 @@ def imgResize(imgName, weight, qlv):
     
     imgName = imgName.split('.')[0]
 
-    # リサイズ画像を保存（ファイル名にメタデータを付与）
-    img_resized.save(variable.imgLocation_resized + imgName + str(meta) + '.jpg', quality=qlv)
+    if ext == 'jpeg' or ext == 'jpg':
+        ext = '.jpg'
+        # リサイズ画像を保存（ファイル名にメタデータを付与）
+        img_resized.save(variable.imgLocation_resized + imgName + str(meta) + ext, quality=qlv)
+    elif ext == 'png':
+        ext = '.png'
+        # リサイズ画像を保存（ファイル名にメタデータを付与）
+        img_resized.save(variable.imgLocation_resized + imgName + str(meta) + ext)
+    
 
 # メタデータ生成関数
 def meta_generate(src_before, src_after, qlv):
