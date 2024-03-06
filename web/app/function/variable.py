@@ -26,3 +26,16 @@ supportedExtentionList = ['jpg', 'jpeg', 'png']
 # # 復号化
 # decrypted_message = xor_cypher(encrypted_message, key)
 # print(decrypted_message)  # "Hello, World!"が出力される
+
+# def string_to_binary(input_string):
+#     x = ''
+#     for i in input_string:
+#         print(i)
+#         x.join(format(ord(i), '08b'))
+#         print(x)
+#     return ''.join(format(ord(char), '08b') for char in input_string)
+
+# # 使用例
+# key = 'hoge'
+# binary_key = string_to_binary(key)
+# print(binary_key)
