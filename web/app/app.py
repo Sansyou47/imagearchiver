@@ -101,7 +101,7 @@ def fib():
                 total_time += end_time - start_time
             
         average_time = total_time / count * 1000  # ミリ秒単位に変換
-        return '計算結果：' + str(result) + ', ' + '実行回数：' + str(count) + ', 平均時間：' + format(average_time, '.4f') + 'ミリ秒, ' + '言語：' + pre  # 4桁まで表示
+        return '計算結果：' + str(result) + '<br>' + '実行回数：' + str(count) + '<br>' + '平均時間：' + format(average_time, '.4f') + 'ミリ秒' + '<br>' + '　言語　：' + pre  # 4桁まで表示
     else:
         return render_template('fib.html')
     
