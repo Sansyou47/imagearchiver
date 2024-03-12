@@ -8,10 +8,30 @@
 
 <body>
     <form action="/fib" method="post">
-        <input type="text" name="number">
-        <input type="submit" value="Fibonacci">
-        <input type="radio" name="preset" value="1" checked>Python
-        <input type="radio" name="preset" value="2">C
+        <h2>n番目のフィボナッチ数列を求めます。</h2>
+        <p>
+            n番目のフィボナッチ数列を求めるのにかかる時間を計測します。<br>
+            処理に使用する言語による計算時間の違いを確認するベンチマーク的なものです。<br>
+        </p>
+        <p>
+            求めたい数列の番号を入力
+            <input type="text" name="number">
+        </p>
+        <p>
+            実行回数を選択
+            <select name="count">
+                <option value="1">1回</option>
+                <option value="10">10回</option>
+                <option value="50">50回</option>
+                <option value="100">100回</option>
+            </select>
+        </p>
+        <p>
+            使用する言語を選択
+            <input type="radio" name="preset" value="1" checked>Python
+            <input type="radio" name="preset" value="2">C
+        </p>
+        <input type="submit" value="計算開始">
     </form>
 </body>
 
