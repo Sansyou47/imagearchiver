@@ -2,7 +2,10 @@
 imgLocation_origin = 'images/origin/'
 # リサイズ画像の保存先
 imgLocation_resized = 'images/downsize/'
+# アプリでサポートされている拡張子リスト
 supportedExtentionList = ['jpg', 'jpeg', 'png']
+# 暗号化された画像の保存先
+imgLocation_encrypted = 'images/encrypted/'
 
 # def xor_cypher(input_string, key):
 #     # 文字列をビット列に変換
@@ -39,3 +42,17 @@ supportedExtentionList = ['jpg', 'jpeg', 'png']
 # key = 'hoge'
 # binary_key = string_to_binary(key)
 # print(binary_key)
+
+def xor_enc_dec(input, output, length):
+    key = 'K'
+    for i in range(length):
+        output[i] = input[i] ^ ord(key)
+        
+def enc_file(inputfile, outputfile):
+    with open(inputfile, 'rb') as f:
+        data = f.read()
+    length = len(data)
+    data = bytearray(data)
+    xor_enc_dec(data, data, length)
+    with open(outputfile, 'wb') as f:
+        f.write(data)
