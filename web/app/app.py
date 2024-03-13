@@ -64,7 +64,7 @@ def index():
             variable.enc_file(inputfile.encode(), outputfile.encode())
         elif do_encrypt == 2:
             # 暗号化するファイルのパス
-            inputfile = '/app/images/origin/' + imageName
+            inputfile = '/app/' + variable.imgLocation_origin + imageName
             # 暗号化後のファイルのパス
             outputfile = '/app/' + variable.imgLocation_encrypted + imageName
             libc.encrypt_image_file(inputfile.encode(), outputfile.encode())
@@ -113,6 +113,38 @@ def comp():
 def compile():
     subprocess.run(['gcc', './c/sample.c', '-shared', '-o', './c/sample.so'])
     return redirect('/compile')
+
+# 暗号化された画像を復号化する
+@app.route('/decrypt', methods = ['GET', 'POST'])
+def decrypt():
+    if request.method == 'POST':
+        fileName = request.form.get('fileName')
+        preset = request.form.get('preset')
+        
+        inputfile = '/app/' + variable.imgLocation_encrypted + fileName
+        outputfile = '/app/' + variable.imgLocation_decrypted + fileName
+        
+        # Pythonで処理
+        if preset == '1':
+            startTime = time.time()
+            variable.enc_file(inputfile.encode(), outputfile.encode())
+            endTime = time.time()
+            preset = 'Python'
+        # Cで処理
+        else:
+            startTime = time.time()
+            libc.encrypt_image_file(inputfile.encode(), outputfile.encode())
+            endTime = time.time()
+            preset = 'C'
+            
+        return '処理時間：' + format(((endTime - startTime) * 1000), '.4f') + 'ミリ秒<br>' + preset  # 4桁まで表示
+    else:
+        # データベースから画像のリストを取得
+        cursor = mysql.get_db().cursor()
+        cursor.execute('SELECT imageName FROM images WHERE userId = 1')
+        imageList = cursor.fetchall()
+        cursor.close()
+        return render_template('decrypt.html', imageList=imageList)
 
 def fibn(n):
     if n <= 1:
