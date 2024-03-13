@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<head>
+    <title>My Web Page3</title>
+</head>
+
+<body>
+    <form action="/decrypt" method="post">
+        <h2>暗号化されたファイルを復号化します。</h2>
+        <p>
+            復号化する画像を選択
+            <select name="fileName">
+                {% for image in imageList %}
+                <option value="{{ image[0] }}">{{ image[0] }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            使用する言語を選択
+            <input type="radio" name="preset" value="1" checked>Python
+            <input type="radio" name="preset" value="2">C
+        </p>
+        <input type="submit" value="復号化">
+    </form>
+</body>
+
+</html>
