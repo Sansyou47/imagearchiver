@@ -6,6 +6,8 @@ imgLocation_resized = 'images/downsize/'
 supportedExtentionList = ['jpg', 'jpeg', 'png']
 # 暗号化された画像の保存先
 imgLocation_encrypted = 'images/encrypted/'
+# 復号化された画像の保存先
+imgLocation_decrypted = 'images/decrypted/'
 
 # def xor_cypher(input_string, key):
 #     # 文字列をビット列に変換
@@ -44,9 +46,13 @@ imgLocation_encrypted = 'images/encrypted/'
 # print(binary_key)
 
 def xor_enc_dec(input, output, length):
-    key = 'K'
+    key = 'secretkey'
+    count = 0
     for i in range(length):
-        output[i] = input[i] ^ ord(key)
+        output[i] = input[i] ^ ord(key[count])
+        count += 1
+        if count == len(key):
+            count = 0
         
 def enc_file(inputfile, outputfile):
     with open(inputfile, 'rb') as f:
