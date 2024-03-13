@@ -13,11 +13,18 @@ int fib(int n)
 // XOR暗号化/復号化関数
 void xor_encrypt_decrypt(char *input, char *output, int length)
 {
-    char key = 'K'; // 暗号化/復号化キー
+    char key[] = "secretkey"; // 暗号化/復号化キー
+    char keys = 'K';          // 暗号化/復号化キー
+    int count = 0;
     // 入力データの各バイトに対してXOR演算を行う
     for (int i = 0; i < length; i++)
     {
-        output[i] = input[i] ^ key; // XOR演算
+        output[i] = input[i] ^ key[count]; // XOR演算
+        count++;
+        if (count >= sizeof(key) - 1)
+        {
+            count = 0;
+        }
     }
 }
 
