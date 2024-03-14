@@ -18,3 +18,10 @@ create table images(
     importDate  datetime default current_timestamp,
     userId      int not null
 );
+
+drop table if exists encrypt;
+create table encrypt(
+    imageId     int primary key,
+    secretKey   varchar(255) not null,
+    userId      int not null
+);
