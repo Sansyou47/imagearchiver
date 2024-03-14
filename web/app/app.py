@@ -64,7 +64,7 @@ def index():
             inputfile = '/app/images/origin/' + imageName
             # 暗号化後のファイルのパス
             outputfile = '/app/' + variable.imgLocation_encrypted + imageName
-            variable.enc_file(inputfile.encode(), outputfile.encode(), secretKey.encode())
+            variable.enc_file(inputfile.encode(), outputfile.encode(), secretKey)
         elif do_encrypt == 2:
             if secretKey is None:
                 secretKey = 'test'
@@ -72,7 +72,7 @@ def index():
             inputfile = '/app/' + variable.imgLocation_origin + imageName
             # 暗号化後のファイルのパス
             outputfile = '/app/' + variable.imgLocation_encrypted + imageName
-            libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey.encode())
+            libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey)
         
         return redirect('/')
     else:
@@ -125,6 +125,9 @@ def decrypt():
     if request.method == 'POST':
         fileName = request.form.get('fileName')
         preset = request.form.get('preset')
+        secretKey = request.form.get('password')
+        if secretKey == '':
+            return 'パスワードを入力してください。<br><a href="/decrypt">戻る</a>'
         
         inputfile = '/app/' + variable.imgLocation_encrypted + fileName
         outputfile = '/app/' + variable.imgLocation_decrypted + fileName
@@ -132,17 +135,17 @@ def decrypt():
         # Pythonで処理
         if preset == '1':
             startTime = time.time()
-            variable.enc_file(inputfile.encode(), outputfile.encode())
+            variable.enc_file(inputfile.encode(), outputfile.encode(), secretKey)
             endTime = time.time()
             preset = 'Python'
         # Cで処理
         else:
             startTime = time.time()
-            libc.encrypt_image_file(inputfile.encode(), outputfile.encode())
+            libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey)
             endTime = time.time()
             preset = 'C'
             
-        return '処理時間：' + format(((endTime - startTime) * 1000), '.4f') + 'ミリ秒<br>' + preset  # 4桁まで表示
+        return '処理時間：' + format(((endTime - startTime) * 1000), '.4f')+ 'ミリ秒<br>' + preset +'<br><a href="/decrypt">戻る</a>' # 4桁まで表示
     else:
         # データベースから画像のリストを取得
         cursor = mysql.get_db().cursor()
