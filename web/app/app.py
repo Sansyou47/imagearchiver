@@ -27,6 +27,7 @@ def index():
         quality = request.form.get('quality')
         image = request.files.get('example')
         do_encrypt = request.form.get('do_encrypt')
+        secretKey = request.form.get('password')
         do_encrypt = int(do_encrypt)
         
         if num is None:
@@ -57,17 +58,21 @@ def index():
                 res = int(res)
                 resize.imgResize(imageName, res, quality)
         if do_encrypt == 1:
+            if secretKey is None:
+                secretKey = 'test'
             # 暗号化するファイルのパス
             inputfile = '/app/images/origin/' + imageName
             # 暗号化後のファイルのパス
             outputfile = '/app/' + variable.imgLocation_encrypted + imageName
-            variable.enc_file(inputfile.encode(), outputfile.encode())
+            variable.enc_file(inputfile.encode(), outputfile.encode(), secretKey.encode())
         elif do_encrypt == 2:
+            if secretKey is None:
+                secretKey = 'test'
             # 暗号化するファイルのパス
             inputfile = '/app/' + variable.imgLocation_origin + imageName
             # 暗号化後のファイルのパス
             outputfile = '/app/' + variable.imgLocation_encrypted + imageName
-            libc.encrypt_image_file(inputfile.encode(), outputfile.encode())
+            libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey.encode())
         
         return redirect('/')
     else:
