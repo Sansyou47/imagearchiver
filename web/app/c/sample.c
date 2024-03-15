@@ -20,7 +20,7 @@ void xor_encrypt_decrypt(char *input, char *output, int length, char *key)
         output[i] = input[i] ^ key[count]; // XOR演算
         count++;
         // 配列の次の要素が終端文字ならカウンタをリセット
-        if (key[count + 1] == '\0')
+        if (key[count] == '\0')
         {
             count = 0;
         }
