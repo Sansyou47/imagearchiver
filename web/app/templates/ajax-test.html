@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <input type="text" id="myInput" placeholder="Type something...">
+    <h1 id="myH1"></h1>
+
+    <script>
+        $(document).ready(function () {
+            $('#myInput').on('input', function () {
+                var inputVal = $(this).val();
+                $('#myH1').text(inputVal);
+            });
+        });
+    </script>
+</body>
+
+</html>

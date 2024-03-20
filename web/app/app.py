@@ -153,6 +153,10 @@ def decrypt():
         imageList = cursor.fetchall()
         cursor.close()
         return render_template('decrypt.html', imageList=imageList)
+    
+@app.route('/ajax')
+def ajax():
+    return render_template('ajax-test.html')
 
 def fibn(n):
     if n <= 1:
