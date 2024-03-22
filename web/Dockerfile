@@ -8,4 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # WORKDIR /app
 
 #Pythonファイルの実行
-CMD ["python", "-u", "app.py"]
+# CMD ["python", "-u", "app.py"]
+
+CMD uwsgi --http=0.0.0.0:8000 --wsgi-file=/app/app.py --callable=app

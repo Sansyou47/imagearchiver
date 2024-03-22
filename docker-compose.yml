@@ -1,32 +1,40 @@
 version: '3'
 
 services:
-  web:
-    build: web
-    ports:
-      - "80:5000"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      TZ: ${default_timezone}
-    volumes:
-      - ./web/app:/app
+  # flask:
+  #   build: web
+  #   ports:
+  #     - "8010:8000"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     TZ: ${default_timezone}
+  #   volumes:
+  #     - ./web/app:/app
     # depends_on:
     #   - mysql
+    # command: sleep infinity
 
-  mysql:
-    build: db
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      TZ: ${default_timezone}
+  nginx:
+    build: nginx
     ports:
-      - "3306:3306"
-    hostname: mysql
-    volumes:
-      - ./db/data:/work
-      - ./db/data:/docker-entrypoint-initdb.d/
+      - "8080:80"
+    # depends_on:
+    #   - flask
+
+  # mysql:
+  #   build: db
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     TZ: ${default_timezone}
+  #   ports:
+  #     - "3306:3306"
+  #   hostname: mysql
+  #   volumes:
+  #     - ./db/data:/work
+  #     - ./db/data:/docker-entrypoint-initdb.d/
