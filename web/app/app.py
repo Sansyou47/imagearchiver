@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flaskext.mysql import MySQL
 from function import resize, save, variable
-import ctypes, subprocess, os, time
+from ctypes import cdll
+import subprocess, os, time
 
-#libc = ctypes.cdll.LoadLibrary("./c/sample.so")
+libc = cdll.LoadLibrary('./c/sample.so')
 
 app = Flask(__name__)
 
@@ -72,7 +73,7 @@ def index():
             inputfile = '/app/' + variable.imgLocation_origin + imageName
             # 暗号化後のファイルのパス
             outputfile = '/app/' + variable.imgLocation_encrypted + imageName
-            #libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey)
+            libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey)
         
         return redirect('/')
     else:
@@ -141,7 +142,7 @@ def decrypt():
         # Cで処理
         else:
             startTime = time.time()
-            #libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey)
+            libc.encrypt_image_file(inputfile.encode(), outputfile.encode(), secretKey)
             endTime = time.time()
             preset = 'C'
             

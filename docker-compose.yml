@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TZ: ${default_timezone}
     volumes:
-      - ./web/app:/app
+      - media-volume:/app
     # depends_on:
     #   - mysql
 
@@ -30,3 +30,6 @@ services:
     volumes:
       - ./db/data:/work
       - ./db/data:/docker-entrypoint-initdb.d/
+
+volumes:
+  media-volume:
